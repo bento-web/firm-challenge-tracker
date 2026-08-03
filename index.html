@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Firm-Challenge-Übersicht</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f5f5f7;
+    color: #1d1d1f;
+    padding: 2rem 1rem;
+    line-height: 1.5;
+}
+.container { max-width: 900px; margin: 0 auto; }
+h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.25rem; color: #1d1d1f; }
+.subtitle { color: #6e6e73; font-size: 0.95rem; margin-bottom: 1.5rem; }
+h2 { font-size: 1.2rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: #1d1d1f; }
+table { width: 100%; border-collapse: separate; border-spacing: 0; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+th, td { padding: 0.6rem 0.5rem; text-align: center; font-size: 0.85rem; border-bottom: 1px solid #e8e8ed; }
+th { background: #f5f5f7; font-weight: 600; color: #1d1d1f; position: sticky; top: 0; }
+th:first-child, td.name { text-align: left; padding-left: 1rem; min-width: 110px; }
+td.name { font-weight: 500; }
+.done { color: #30d158; font-weight: 700; font-size: 1rem; }
+.open { color: #c7c7cc; }
+td.count { font-weight: 600; color: #1d1d1f; }
+tr:last-child td { border-bottom: none; }
+tr:hover { background: #f5f5f7; }
+.stats { background: #fff; border-radius: 12px; padding: 1rem 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 1.5rem; }
+.stat-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+.stat-row:last-child { margin-bottom: 0; }
+.stat-label { width: 140px; font-size: 0.85rem; flex-shrink: 0; }
+.stat-bar { flex: 1; height: 10px; background: #e8e8ed; border-radius: 5px; overflow: hidden; }
+.stat-fill { height: 100%; background: linear-gradient(90deg, #007aff, #30d158); border-radius: 5px; transition: width 0.5s ease; }
+.stat-count { width: 50px; text-align: right; font-size: 0.8rem; color: #6e6e73; flex-shrink: 0; }
+.details-section { background: #fff; border-radius: 12px; padding: 1rem 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-top: 1.5rem; }
+.firmling-detail { padding: 0.75rem 0; border-bottom: 1px solid #e8e8ed; }
+.firmling-detail:last-child { border-bottom: none; }
+.firmling-detail h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; }
+.firmling-detail p { font-size: 0.85rem; color: #3a3a3c; margin-bottom: 0.15rem; }
+footer { text-align: center; color: #6e6e73; font-size: 0.75rem; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e8e8ed; }
+@media (max-width: 600px) {
+    th, td { font-size: 0.75rem; padding: 0.4rem 0.3rem; }
+    th:first-child, td.name { padding-left: 0.5rem; min-width: 75px; }
+    .stat-label { width: 100px; font-size: 0.75rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>🏕️ Firm-Challenge-Übersicht</h1>
+    <p class="subtitle">PG Giebelstadt-Bütthard · Stand: 03.08.2026 · Nur für Firmlinge, Eltern & Team</p>
+
+    <div class="stats">
+        <h2>📊 Übersicht</h2>
+        <div class="stat-row">
+            <span class="stat-label">Mein Leben & ich</span>
+            <div class="stat-bar"><div class="stat-fill" style="width:50%"></div></div>
+            <span class="stat-count">10/20</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Gottesbilder</span>
+            <div class="stat-bar"><div class="stat-fill" style="width:70%"></div></div>
+            <span class="stat-count">14/20</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Jesus & seine Wunder</span>
+            <div class="stat-bar"><div class="stat-fill" style="width:40%"></div></div>
+            <span class="stat-count">8/20</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Heiliger Geist & Talente</span>
+            <div class="stat-bar"><div class="stat-fill" style="width:20%"></div></div>
+            <span class="stat-count">4/20</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Stärken & Schwächen</span>
+            <div class="stat-bar"><div class="stat-fill" style="width:10%"></div></div>
+            <span class="stat-count">2/20</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Unser Glaube</span>
+            <div class="stat-bar"><div class="stat-fill" style="width:5%"></div></div>
+            <span class="stat-count">1/20</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label">Schattenseiten & Vergebung</span>
+            <div class="stat-bar"><div class="stat-fill" style="width:5%"></div></div>
+            <span class="stat-count">1/20</span>
+        </div>
+    </div>
+
+    <table>
+    <thead><tr>
+        <th>Name</th>
+        <th title="Mein Leben & ich">1</th><th title="Gottesbilder">2</th><th title="Jesus Wunder">3</th><th title="Heiliger Geist">4</th><th title="Stärken & Schwächen">5</th><th title="Unser Glaube">6</th><th title="Schattenseiten">7</th>
+        <th>✅</th>
+    </tr></thead>
+    <tbody>
+    <tr><td class="name">Lilia</td><td class="done">✓</td><td class="done">✓</td><td class="done">✓</td><td class="done">✓</td><td class="done">✓</td><td class="open">—</td><td class="open">—</td><td class="count">5/7</td></tr>
+    <tr><td class="name">Robin</td><td class="done">✓</td><td class="done">✓</td><td class="done">✓</td><td class="done">✓</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="count">4/7</td></tr>
+    <tr><td class="name">Kilian</td><td class="done">✓</td><td class="done">✓</td><td class="done">✓</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="count">3/7</td></tr>
+    <tr><td class="name">Marius</td><td class="done">✓</td><td class="done">✓</td><td class="done">✓</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="count">3/7</td></tr>
+    <tr><td class="name">Samuel</td><td class="done">✓</td><td class="done">✓</td><td class="done">✓</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="count">3/7</td></tr>
+    <tr><td class="name">Luis</td><td class="done">✓</td><td class="done">✓</td><td class="done">✓</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="count">3/7</td></tr>
+    <tr><td class="name">Jakob</td><td class="open">—</td><td class="done">✓</td><td class="open">—</td><td class="open">—</td><td class="done">✓</td><td class="done">✓</td><td class="open">—</td><td class="count">3/7</td></tr>
+    <tr><td class="name">Jonathan</td><td class="open">—</td><td class="done">✓</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="done">✓</td><td class="count">2/7</td></tr>
+    <tr><td class="name">Fabienne</td><td class="done">✓</td><td class="done">✓</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="count">2/7</td></tr>
+    <tr><td class="name">Julian</td><td class="done">✓</td><td class="done">✓</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="count">2/7</td></tr>
+    <tr><td class="name">Max</td><td class="done">✓</td><td class="done">✓</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="count">2/7</td></tr>
+    <tr><td class="name">Alexander</td><td class="open">—</td><td class="done">✓</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="count">1/7</td></tr>
+    <tr><td class="name">Magnus</td><td class="open">—</td><td class="done">✓</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="count">1/7</td></tr>
+    <tr><td class="name">Veit</td><td class="open">—</td><td class="done">✓</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="count">1/7</td></tr>
+    <tr><td class="name">Leandro</td><td class="done">✓</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="count">1/7</td></tr>
+    <tr><td class="name">Franziska</td><td class="done">✓</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="count">1/7</td></tr>
+    <tr><td class="name">Anna</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="count">0/7</td></tr>
+    <tr><td class="name">Laurin</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="count">0/7</td></tr>
+    <tr><td class="name">Lucas</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="count">0/7</td></tr>
+    <tr><td class="name">Marcel</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="open">—</td><td class="count">0/7</td></tr>
+    </tbody>
+    </table>
+
+    <div class="details-section">
+        <h2>📋 Details pro Firmling</h2>
+        <div class="firmling-detail"><h3>Lilia</h3><p>✅ <strong>5/7</strong> – Mein Leben & ich, Gottesbilder, Jesus & seine Wunder, Heiliger Geist & Talente, Stärken & Schwächen</p><p>⏳ Offen: Unser Glaube, Schattenseiten & Vergebung</p></div>
+        <div class="firmling-detail"><h3>Robin</h3><p>✅ <strong>4/7</strong> – Mein Leben & ich, Gottesbilder, Jesus & seine Wunder, Heiliger Geist & Talente</p><p>⏳ Offen: Stärken & Schwächen, Unser Glaube, Schattenseiten & Vergebung</p></div>
+        <div class="firmling-detail"><h3>Kilian</h3><p>✅ <strong>3/7</strong> – Mein Leben & ich, Gottesbilder, Jesus & seine Wunder</p><p>⏳ Offen: Heiliger Geist & Talente, Stärken & Schwächen, Unser Glaube, Schattenseiten & Vergebung</p></div>
+        <div class="firmling-detail"><h3>Marius</h3><p>✅ <strong>3/7</strong> – Mein Leben & ich, Gottesbilder, Jesus & seine Wunder</p><p>⏳ Offen: Heiliger Geist & Talente, Stärken & Schwächen, Unser Glaube, Schattenseiten & Vergebung</p></div>
+        <div class="firmling-detail"><h3>Samuel</h3><p>✅ <strong>3/7</strong> – Mein Leben & ich, Gottesbilder, Jesus & seine Wunder</p><p>⏳ Offen: Heiliger Geist & Talente, Stärken & Schwächen, Unser Glaube, Schattenseiten & Vergebung</p></div>
+        <div class="firmling-detail"><h3>Luis</h3><p>✅ <strong>3/7</strong> – Mein Leben & ich, Gottesbilder, Jesus & seine Wunder</p><p>⏳ Offen: Heiliger Geist & Talente, Stärken & Schwächen, Unser Glaube, Schattenseiten & Vergebung</p></div>
+        <div class="firmling-detail"><h3>Jakob</h3><p>✅ <strong>3/7</strong> – Gottesbilder, Stärken & Schwächen, Unser Glaube</p><p>⏳ Offen: Mein Leben & ich, Jesus & seine Wunder, Heiliger Geist & Talente, Schattenseiten & Vergebung</p></div>
+        <div class="firmling-detail"><h3>Jonathan</h3><p>✅ <strong>2/7</strong> – Gottesbilder, Schattenseiten & Vergebung</p><p>⏳ Offen: Mein Leben & ich, Jesus & seine Wunder, Heiliger Geist & Talente, Stärken & Schwächen, Unser Glaube</p></div>
+        <div class="firmling-detail"><h3>Fabienne</h3><p>✅ <strong>2/7</strong> – Mein Leben & ich, Gottesbilder</p><p>⏳ Offen: Jesus & seine Wunder, Heiliger Geist & Talente, Stärken & Schwächen, Unser Glaube, Schattenseiten & Vergebung</p></div>
+        <div class="firmling-detail"><h3>Julian</h3><p>✅ <strong>2/7</strong> – Mein Leben & ich, Gottesbilder</p><p>⏳ Offen: Jesus & seine Wunder, Heiliger Geist & Talente, Stärken & Schwächen, Unser Glaube, Schattenseiten & Vergebung</p></div>
+        <div class="firmling-detail"><h3>Max</h3><p>✅ <strong>2/7</strong> – Mein Leben & ich, Gottesbilder</p><p>⏳ Offen: Jesus & seine Wunder, Heiliger Geist & Talente, Stärken & Schwächen, Unser Glaube, Schattenseiten & Vergebung</p></div>
+        <div class="firmling-detail"><h3>Alexander</h3><p>✅ <strong>1/7</strong> – Gottesbilder</p><p>⏳ Offen: Mein Leben & ich, Jesus & seine Wunder, Heiliger Geist & Talente, Stärken & Schwächen, Unser Glaube, Schattenseiten & Vergebung</p></div>
+        <div class="firmling-detail"><h3>Magnus</h3><p>✅ <strong>1/7</strong> – Gottesbilder</p><p>⏳ Offen: Mein Leben & ich, Jesus & seine Wunder, Heiliger Geist & Talente, Stärken & Schwächen, Unser Glaube, Schattenseiten & Vergebung</p></div>
+        <div class="firmling-detail"><h3>Veit</h3><p>✅ <strong>1/7</strong> – Gottesbilder</p><p>⏳ Offen: Mein Leben & ich, Jesus & seine Wunder, Heiliger Geist & Talente, Stärken & Schwächen, Unser Glaube, Schattenseiten & Vergebung</p></div>
+        <div class="firmling-detail"><h3>Leandro</h3><p>✅ <strong>1/7</strong> – Mein Leben & ich</p><p>⏳ Offen: Gottesbilder, Jesus & seine Wunder, Heiliger Geist & Talente, Stärken & Schwächen, Unser Glaube, Schattenseiten & Vergebung</p></div>
+        <div class="firmling-detail"><h3>Franziska</h3><p>✅ <strong>1/7</strong> – Mein Leben & ich</p><p>⏳ Offen: Gottesbilder, Jesus & seine Wunder, Heiliger Geist & Talente, Stärken & Schwächen, Unser Glaube, Schattenseiten & Vergebung</p></div>
+        <div class="firmling-detail"><h3>Anna</h3><p>✅ <strong>0/7</strong> – noch keine Challenges erledigt</p><p>⏳ Offen: alle 7</p></div>
+        <div class="firmling-detail"><h3>Laurin</h3><p>✅ <strong>0/7</strong> – noch keine Challenges erledigt</p><p>⏳ Offen: alle 7</p></div>
+        <div class="firmling-detail"><h3>Lucas</h3><p>✅ <strong>0/7</strong> – noch keine Challenges erledigt</p><p>⏳ Offen: alle 7</p></div>
+        <div class="firmling-detail"><h3>Marcel</h3><p>✅ <strong>0/7</strong> – noch keine Challenges erledigt</p><p>⏳ Offen: alle 7</p></div>
+    </div>
+
+    <footer>
+        <p>PG Giebelstadt-Bütthard · Firmvorbereitung</p>
+        <p>Keine Analyse, keine Cookies, keine Weitergabe von Daten.</p>
+    </footer>
+</div>
+</body>
+</html>
