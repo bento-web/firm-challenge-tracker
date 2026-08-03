@@ -15,6 +15,7 @@ import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+import shutil
 
 # ── Paths ──────────────────────────────────────────────────────────────────
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -27,13 +28,17 @@ SHEET_ID = "1GC0G_sejvJNWWNZjxRK9cjHzQaLPvUEruyY2PKQIbRA"
 # ── Challenge tab configuration ────────────────────────────────────────────
 # (sheet_tab_name, ch_number, short_label, display_name)
 CHALLENGES = [
-    ("1: Mein Leben und Ich",           1, "Mein Leben & ich",          "Mein Leben & ich"),
-    ("2. Gottesbilder - G5_RM_Gottesbilder Worte", 2, "Gottesbilder",  "Gottesbilder"),
-    ("3: Jesus - J6_RM_Jesus Wunder",    3, "Jesus & seine Wunder",     "Jesus & seine Wunder"),
+    ("1: Mein Leben und ich - l6-rueckmeldung-leben-foto", 1, "Mein Leben & ich", "Mein Leben & ich"),
+    ("2. Gottesbilder - G5_RM_Gottesbilder Worte - g6-rueckmeldung-wortwolke", 2, "Gottesbilder", "Gottesbilder"),
+    ("3: Jesus - J6_RM_Jesus Wunder", 3, "Jesus & seine Wunder", "Jesus & seine Wunder"),
     ("4: Heiliger Geist:  H6_RM_Heiliger Geist Talente", 4, "Heiliger Geist & Talente", "Heiliger Geist & Talente"),
-    ("L6_RM_Stärken und Schwächen",      5, "Stärken & Schwächen",      "Stärken & Schwächen"),
-    ("Ch 7",                             6, "Unser Glaube",             "Unser Glaube"),
-    ("Ch 8",                             7, "Schattenseiten & Vergebung", "Schattenseiten & Vergebung"),
+    ("5: u7-rueckmeldung-glaube", 5, "Unser Glaube", "Unser Glaube"),
+    ("6: k2-kirche-bedeutet-fuer-mich", 6, "Kirche (K2)", "Kirche"),
+    ("6: k5-rueckmeldung-ich-und-kirche", 6, "Kirche (K5)", "Kirche"),
+    ("7: w4-rueckmeldung-ich-wir", 7, "Vom Ich zum Wir", "Vom Ich zum Wir"),
+    ("8: s5-rueckmeldung-natur", 8, "Schöpfung", "Schöpfung"),
+    ("9: v8-rueckmeldung-beichte", 9, "Schattenseiten & Vergebung", "Schattenseiten & Vergebung"),
+    ("10: f9-rueckmeldung-firmung", 10, "Sakrament der Firmung", "Sakrament der Firmung"),
 ]
 
 # Display labels (used in stats bar, column tooltips, and details section)
@@ -41,7 +46,7 @@ CH_LABELS = {ch_num: label for _, ch_num, _, label in CHALLENGES}
 CH_SHORT = {ch_num: short for _, ch_num, short, _ in CHALLENGES}
 CH_NUM_MAP = {ch_num: ch_num for ch_num in range(1, 8)}  # 1-indexed
 
-TOTAL_CHALLENGES = 7
+TOTAL_CHALLENGES = 10
 
 
 # ── Token refresh ──────────────────────────────────────────────────────────
@@ -146,7 +151,7 @@ def sheets_get(tab_name, sheet_range="A1:F998"):
     range_spec = f"'{tab_name}'!{sheet_range}"
 
     cmd = [
-        sys.executable,
+        "/Users/benediktglaser/.hermes/hermes-agent/venv/bin/python3",
         str(GOOGLE_API),
         "sheets", "get",
         SHEET_ID,
@@ -479,9 +484,14 @@ def main():
 
     # Encrypt with staticrypt
     subprocess.run(
-        ["staticrypt", INDEX_PATH, "-p", "PG-GB-Firmung2026!", "-o", INDEX_PATH],
+        ["staticrypt", INDEX_PATH, "-p", "PG-GB-Firmung2026!"],
         capture_output=True, text=True, timeout=30
     )
+    # staticrypt v3.x creates an encrypted/ folder - copy back
+    encrypted_path = SCRIPT_DIR / "encrypted" / INDEX_PATH.name
+    if encrypted_path.exists():
+        shutil.copy2(str(encrypted_path), INDEX_PATH)
+        shutil.rmtree(str(SCRIPT_DIR / "encrypted"))
     print(f"✅ Passwortverschlüsselung angewendet")
 
     # 5. Git commit + push
