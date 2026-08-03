@@ -26,25 +26,26 @@ TOKEN_PATH = Path.home() / ".hermes" / "google_token.json"
 SHEET_ID = "1GC0G_sejvJNWWNZjxRK9cjHzQaLPvUEruyY2PKQIbRA"
 
 # ── Challenge tab configuration ────────────────────────────────────────────
-# (sheet_tab_name, ch_number, short_label, display_name)
+# (sheet_tab_name, ch_number, short_label, display_name, spiricloud_url)
 CHALLENGES = [
-    ("1: Mein Leben und ich - l6-rueckmeldung-leben-foto", 1, "Mein Leben & ich", "Mein Leben & ich"),
-    ("2. Gottesbilder - G5_RM_Gottesbilder Worte - g6-rueckmeldung-wortwolke", 2, "Gottesbilder", "Gottesbilder"),
-    ("3: Jesus - J6_RM_Jesus Wunder", 3, "Jesus & seine Wunder", "Jesus & seine Wunder"),
-    ("4: Heiliger Geist:  H6_RM_Heiliger Geist Talente", 4, "Heiliger Geist & Talente", "Heiliger Geist & Talente"),
-    ("5: u7-rueckmeldung-glaube", 5, "Unser Glaube", "Unser Glaube"),
-    ("6: k2-kirche-bedeutet-fuer-mich", 6, "Kirche (K2)", "Kirche"),
-    ("6: k5-rueckmeldung-ich-und-kirche", 6, "Kirche (K5)", "Kirche"),
-    ("7: w4-rueckmeldung-ich-wir", 7, "Vom Ich zum Wir", "Vom Ich zum Wir"),
-    ("8: s5-rueckmeldung-natur", 8, "Schöpfung", "Schöpfung"),
-    ("9: v8-rueckmeldung-beichte", 9, "Schattenseiten & Vergebung", "Schattenseiten & Vergebung"),
-    ("10: f9-rueckmeldung-firmung", 10, "Sakrament der Firmung", "Sakrament der Firmung"),
+    ("1: Mein Leben und ich - l6-rueckmeldung-leben-foto", 1, "Mein Leben & ich", "Mein Leben & ich", "https://spiricloud.at/mein-leben-ich/"),
+    ("2. Gottesbilder - G5_RM_Gottesbilder Worte - g6-rueckmeldung-wortwolke", 2, "Gottesbilder", "Gottesbilder", "https://spiricloud.at/gottesbilder/"),
+    ("3: Jesus - J6_RM_Jesus Wunder", 3, "Jesus & seine Wunder", "Jesus & seine Wunder", "https://spiricloud.at/jesus/"),
+    ("4: Heiliger Geist:  H6_RM_Heiliger Geist Talente", 4, "Heiliger Geist & Talente", "Heiliger Geist & Talente", "https://spiricloud.at/heiliger-geist/"),
+    ("5: u7-rueckmeldung-glaube", 5, "Unser Glaube", "Unser Glaube", "https://spiricloud.at/unser-glaube/"),
+    ("6: k2-kirche-bedeutet-fuer-mich", 6, "Kirche (K2)", "Kirche", "https://spiricloud.at/kirche/"),
+    ("6: k5-rueckmeldung-ich-und-kirche", 6, "Kirche (K5)", "Kirche", "https://spiricloud.at/kirche/"),
+    ("7: w4-rueckmeldung-ich-wir", 7, "Vom Ich zum Wir", "Vom Ich zum Wir", "https://spiricloud.at/vom-ich-zum-wir/"),
+    ("8: s5-rueckmeldung-natur", 8, "Schöpfung", "Schöpfung", "https://spiricloud.at/schoepfung/"),
+    ("9: v8-rueckmeldung-beichte", 9, "Schattenseiten & Vergebung", "Schattenseiten & Vergebung", "https://spiricloud.at/schattenseiten-vergebung/"),
+    ("10: f9-rueckmeldung-firmung", 10, "Sakrament der Firmung", "Sakrament der Firmung", "https://spiricloud.at/sakrament-der-firmung/"),
 ]
 
-# Display labels (used in stats bar, column tooltips, and details section)
-CH_LABELS = {ch_num: label for _, ch_num, _, label in CHALLENGES}
-CH_SHORT = {ch_num: short for _, ch_num, short, _ in CHALLENGES}
-CH_NUM_MAP = {ch_num: ch_num for ch_num in range(1, 8)}  # 1-indexed
+# Display labels, short names, and URLs
+CH_LABELS = {ch_num: label for _, ch_num, _, label, _ in CHALLENGES}
+CH_SHORT = {ch_num: short for _, ch_num, short, _, _ in CHALLENGES}
+CH_URLS = {ch_num: url for _, ch_num, _, _, url in CHALLENGES}
+CH_NUM_MAP = {ch_num: ch_num for ch_num in range(1, 11)}
 
 TOTAL_CHALLENGES = 10
 
@@ -206,67 +207,49 @@ def get_people_from_personen():
 
 
 def get_challenge_data():
-    """Read every challenge tab and return a dict: {(nachname, vorname): [ch1_done, ch2_done, ...]}"""
-    # First, get the list of people to include
+    """Read Personen tab Spalte C (Challenges) and return dict: {(nachname, vorname): [ch1_done, ch2_done, ...]}"""
     people = get_people_from_personen()
-    # Build key set: (nachname_lower, vorname_lower)
-    person_keys = set()
+    
+    # Result dict: key=(nachname, vorname) -> list of bool (TOTAL_CHALLENGES)
+    result = {}
     for vorname, nachname, _ in people:
-        person_keys.add((nachname.lower(), vorname.lower()))
-
+        result[(nachname, vorname)] = [False] * TOTAL_CHALLENGES
+    
     # Build name_to_vorname mapping for display
     name_map = {}
     for vorname, nachname, _ in people:
         name_map[(nachname.lower(), vorname.lower())] = vorname
-
-    # Result dict: key=(nachname, vorname) -> list of bool (7 challenges)
-    result = {}
-    for vorname, nachname, _ in people:
-        result[(nachname, vorname)] = [False] * TOTAL_CHALLENGES
-
-    for tab_name, ch_num, _, _ in CHALLENGES:
-        ch_index = ch_num - 1  # 0-based
-        rows = sheets_get(tab_name, "A1:F998")
-
-        # Skip header rows (row 0 = title, row 1 = column headers)
-        for row in rows[2:]:
-            if len(row) < 6:
-                continue
-            nachname_raw = (row[0] or "").strip()
-            vorname = (row[1] or "").strip()
-            nachname = nachname_raw.lstrip("?")
-            c_val = (row[2] or "").strip() if len(row) > 2 else ""
-            d_val = (row[3] or "").strip() if len(row) > 3 else ""
-            e_val = (row[4] or "").strip() if len(row) > 4 else ""
-            f_val = (row[5] or "").strip() if len(row) > 5 else ""
-
-            if not nachname or not vorname:
-                continue
-
-            # Check if this person is in our list
-            key = (nachname.lower(), vorname.lower())
-            if key not in person_keys:
-                continue
-
-            # A challenge is "done" if:
-            # - reagiert column (F) is TRUE, OR
-            # - there's content in column C (Antwort 1), OR
-            # - there's content in column D (Antwort 2), OR
-            # - there's content in column E (Bewertung)
-            is_done = (
-                f_val.upper() == "TRUE"
-                or bool(c_val)
-                or bool(d_val)
-                or bool(e_val)
-            )
-
-            if is_done:
-                # Find the entry and mark
-                for key2 in result:
-                    if key2[0].lower() == nachname.lower() and key2[1].lower() == vorname.lower():
-                        result[key2][ch_index] = True
-                        break
-
+    
+    # Read Personen tab with column C
+    rows = sheets_get("Personen", "A1:D998")
+    
+    for row in rows[2:]:
+        if len(row) < 3:
+            continue
+        nachname_raw = (row[0] or "").strip()
+        vorname = (row[1] or "").strip()
+        nachname = nachname_raw.lstrip("?")
+        ch_str = (row[2] or "").strip()
+        
+        if not nachname or not vorname:
+            continue
+        
+        # Parse challenge numbers
+        nums = []
+        for part in ch_str.replace(" ", "").split(","):
+            part = part.strip()
+            if part and part.isdigit():
+                n = int(part)
+                if 1 <= n <= TOTAL_CHALLENGES:
+                    nums.append(n)
+        
+        # Find matching entry and mark
+        for key in result:
+            if key[0].lower() == nachname.lower() and key[1].lower() == vorname.lower():
+                for n in nums:
+                    result[key][n - 1] = True
+                break
+    
     return result, name_map
 
 
@@ -311,8 +294,9 @@ def generate_html(challenge_data, name_map, today_str):
     ch_header_cells = []
     for ch_num in range(1, TOTAL_CHALLENGES + 1):
         label = CH_SHORT[ch_num]
+        url = CH_URLS.get(ch_num, "#")
         ch_header_cells.append(
-            f'<th title="{escape_html(label)}">{ch_num}</th>'
+            f'<th title="{escape_html(label)}"><a href="{url}" target="_blank" style="color:inherit;text-decoration:none">{ch_num}</a></th>'
         )
     ch_header_html = "\n        ".join(ch_header_cells)
 
@@ -363,6 +347,16 @@ def generate_html(challenge_data, name_map, today_str):
         )
 
     details_html = "\n".join(detail_parts)
+
+    # ── Links section ────────────────────────────────────────────────────
+    link_rows = []
+    for ch_num in range(1, TOTAL_CHALLENGES + 1):
+        label = CH_LABELS[ch_num]
+        url = CH_URLS.get(ch_num, "#")
+        link_rows.append(
+            f'      <tr><td>{ch_num}</td><td>{escape_html(label)}</td><td><a href="{url}" target="_blank">{url}</a></td></tr>'
+        )
+    links_html = "\n".join(link_rows)
 
     # ── Build full HTML ─────────────────────────────────────────────────
     html = f"""<!DOCTYPE html>
@@ -439,6 +433,17 @@ footer {{ text-align: center; color: #6e6e73; font-size: 0.75rem; margin-top: 2r
     <div class="details-section">
         <h2>📋 Details pro Firmling</h2>
 {details_html}
+    </div>
+
+    <div class="details-section">
+        <h2>🔗 Direktlinks zu den Challenges</h2>
+        <p style="font-size:0.85rem;color:#3a3a3c;margin-bottom:0.5rem">Klick auf eine Challenge, um direkt zum Modul auf spiricloud.at zu gelangen (PIN eingeben und loslegen):</p>
+        <table style="width:100%">
+        <thead><tr><th>#</th><th>Challenge</th><th>Link</th></tr></thead>
+        <tbody>
+{links_html}
+        </tbody>
+        </table>
     </div>
 
     <footer>

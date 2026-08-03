@@ -1,0 +1,259 @@
+[BASE]
+PIN: 6-11922401
+PAGE: https://bento-web.github.io/firm-challenge-tracker/
+PASS: PG-GB-Firmung2026!
+DEADLINE: Bis Do, 8. Oktober, 18:30 Uhr sollten Challenges 1-7 erledigt sein.
+FERIEN: schöne Sommerferien! 🌞
+SIGNATURE: Viele Grüße und schöne Ferien, Benedikt Glaser
+
+[TEMPLATE_done_1_5]
+Hallo NAME,
+
+FERIEN
+
+Hier deine Übersicht:
+
+1 – Mein Leben & ich: ✅
+2 – Gottesbilder: ✅
+3 – Jesus & seine Wunder: ✅
+4 – Heiliger Geist & Talente: ✅
+5 – Unser Glaube: ✅
+6 – Kirche: ❌
+7 – Vom Ich zum Wir: ❌
+8 – Schöpfung: ❌
+9 – Schattenseiten & Vergebung: ❌
+10 – Sakrament der Firmung: ❌
+
+DEADLINE
+Jetzt geht es also weiter mit 6 und 7.
+
+PIN: 6-11922401
+🔗 https://spiricloud.at/kirche/ (Ch 6)
+🔗 https://spiricloud.at/vom-ich-zum-wir/ (Ch 7)
+
+PAGE
+PASS
+
+SIGNATURE
+
+[TEMPLATE_luis]
+Hallo Luis,
+
+FERIEN
+
+Hier deine Übersicht:
+
+1 – Mein Leben & ich: ✅
+2 – Gottesbilder: ✅
+3 – Jesus & seine Wunder: ✅
+4 – Heiliger Geist & Talente: ✅
+5 – Unser Glaube: ✅
+6 – Kirche: ❌
+7 – Vom Ich zum Wir: ✅
+8 – Schöpfung: ❌
+9 – Schattenseiten & Vergebung: ❌
+10 – Sakrament der Firmung: ❌
+
+DEADLINE
+Jetzt geht es also weiter mit 6.
+
+PIN: 6-11922401
+🔗 https://spiricloud.at/kirche/ (Ch 6)
+
+PAGE
+PASS
+
+SIGNATURE
+
+[TEMPLATE_jonathan]
+Hallo Jonathan,
+
+FERIEN
+
+Hier deine Übersicht:
+
+1 – Mein Leben & ich: ✅
+2 – Gottesbilder: ✅
+3 – Jesus & seine Wunder: ✅
+4 – Heiliger Geist & Talente: ✅
+5 – Unser Glaube: ✅
+6 – Kirche: ❌
+7 – Vom Ich zum Wir: ✅
+8 – Schöpfung: ✅
+9 – Schattenseiten & Vergebung: ✅
+10 – Sakrament der Firmung: ❌
+
+DEADLINE
+Jetzt geht es also weiter mit 6 und 10.
+
+PIN: 6-11922401
+🔗 https://spiricloud.at/kirche/ (Ch 6)
+🔗 https://spiricloud.at/sakrament-der-firmung/ (Ch 10)
+
+PAGE
+PASS
+
+SIGNATURE
+
+[TEMPLATE_veit]
+Hallo Veit,
+
+FERIEN
+
+Hier deine Übersicht:
+
+1 – Mein Leben & ich: ❌
+2 – Gottesbilder: ✅
+3 – Jesus & seine Wunder: ✅
+4 – Heiliger Geist & Talente: ✅
+5 – Unser Glaube: ✅
+6 – Kirche: ✅
+7 – Vom Ich zum Wir: ✅
+8 – Schöpfung: ❌
+9 – Schattenseiten & Vergebung: ❌
+10 – Sakrament der Firmung: ✅
+
+DEADLINE
+Jetzt geht es also weiter mit 1, 8 und 9.
+
+PIN: 6-11922401
+🔗 https://spiricloud.at/mein-leben-ich/ (Ch 1)
+🔗 https://spiricloud.at/schoepfung/ (Ch 8)
+🔗 https://spiricloud.at/schattenseiten-vergebung/ (Ch 9)
+
+PAGE
+PASS
+
+SIGNATURE
+
+[TEMPLATE_franziska]
+Hallo Franziska,
+
+FERIEN
+
+Hier deine Übersicht:
+
+1 – Mein Leben & ich: ✅
+2 – Gottesbilder: ✅
+3 – Jesus & seine Wunder: ✅
+4 – Heiliger Geist & Talente: ❌
+5 – Unser Glaube: ❌
+6 – Kirche: ❌
+7 – Vom Ich zum Wir: ❌
+8 – Schöpfung: ❌
+9 – Schattenseiten & Vergebung: ❌
+10 – Sakrament der Firmung: ❌
+
+DEADLINE
+Jetzt geht es also weiter mit 4, 5, 6 und 7.
+
+PIN: 6-11922401
+🔗 https://spiricloud.at/heiliger-geist/ (Ch 4)
+🔗 https://spiricloud.at/unser-glaube/ (Ch 5)
+🔗 https://spiricloud.at/kirche/ (Ch 6)
+🔗 https://spiricloud.at/vom-ich-zum-wir/ (Ch 7)
+
+PAGE
+PASS
+
+SIGNATURE
+
+[TEMPLATE_alexander]
+Hallo Alexander,
+
+FERIEN
+
+Hier deine Übersicht:
+
+1 – Mein Leben & ich: ✅
+2 – Gottesbilder: ✅
+3 – Jesus & seine Wunder: ❌
+4 – Heiliger Geist & Talente: ❌
+5 – Unser Glaube: ❌
+6 – Kirche: ❌
+7 – Vom Ich zum Wir: ❌
+8 – Schöpfung: ❌
+9 – Schattenseiten & Vergebung: ❌
+10 – Sakrament der Firmung: ❌
+
+DEADLINE
+Jetzt geht es also los mit 3, 4, 5, 6 und 7.
+
+PIN: 6-11922401
+🔗 https://spiricloud.at/jesus/ (Ch 3)
+🔗 https://spiricloud.at/heiliger-geist/ (Ch 4)
+🔗 https://spiricloud.at/unser-glaube/ (Ch 5)
+🔗 https://spiricloud.at/kirche/ (Ch 6)
+🔗 https://spiricloud.at/vom-ich-zum-wir/ (Ch 7)
+
+PAGE
+PASS
+
+SIGNATURE
+
+[TEMPLATE_jakob]
+Hallo Jakob,
+
+FERIEN
+
+Hier deine Übersicht:
+
+1 – Mein Leben & ich: ❌
+2 – Gottesbilder: ✅
+3 – Jesus & seine Wunder: ❌
+4 – Heiliger Geist & Talente: ❌
+5 – Unser Glaube: ✅
+6 – Kirche: ❌
+7 – Vom Ich zum Wir: ❌
+8 – Schöpfung: ❌
+9 – Schattenseiten & Vergebung: ❌
+10 – Sakrament der Firmung: ❌
+
+DEADLINE
+Jetzt geht es also los mit 1, 3, 4, 6 und 7.
+
+PIN: 6-11922401
+🔗 https://spiricloud.at/mein-leben-ich/ (Ch 1)
+🔗 https://spiricloud.at/jesus/ (Ch 3)
+🔗 https://spiricloud.at/heiliger-geist/ (Ch 4)
+🔗 https://spiricloud.at/kirche/ (Ch 6)
+🔗 https://spiricloud.at/vom-ich-zum-wir/ (Ch 7)
+
+PAGE
+PASS
+
+SIGNATURE
+
+[TEMPLATE_leandro]
+Hallo Leandro,
+
+FERIEN
+
+Hier deine Übersicht:
+
+1 – Mein Leben & ich: ✅
+2 – Gottesbilder: ❌
+3 – Jesus & seine Wunder: ❌
+4 – Heiliger Geist & Talente: ❌
+5 – Unser Glaube: ❌
+6 – Kirche: ❌
+7 – Vom Ich zum Wir: ❌
+8 – Schöpfung: ❌
+9 – Schattenseiten & Vergebung: ❌
+10 – Sakrament der Firmung: ❌
+
+DEADLINE
+Jetzt geht es also los mit 2, 3, 4, 5, 6 und 7.
+
+PIN: 6-11922401
+🔗 https://spiricloud.at/gottesbilder/ (Ch 2)
+🔗 https://spiricloud.at/jesus/ (Ch 3)
+🔗 https://spiricloud.at/heiliger-geist/ (Ch 4)
+🔗 https://spiricloud.at/unser-glaube/ (Ch 5)
+🔗 https://spiricloud.at/kirche/ (Ch 6)
+🔗 https://spiricloud.at/vom-ich-zum-wir/ (Ch 7)
+
+PAGE
+PASS
+
+SIGNATURE

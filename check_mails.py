@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Täglicher Check: Neue Spiricloud-E-Mails suchen und Google-Tabelle aktualisieren."""
 
-import json, os, subprocess, sys, datetime, re
+import json, os, subprocess, sys, datetime, re, shutil
 
 HERMES = os.path.expanduser("~/.hermes")
-GAPI = f"python {HERMES}/skills/productivity/google-workspace/scripts/google_api.py"
+VENV_PYTHON = os.path.expanduser("~/.hermes/hermes-agent/venv/bin/python3")
+GAPI = f"{VENV_PYTHON} {HERMES}/skills/productivity/google-workspace/scripts/google_api.py"
 SHEET_ID = "1GC0G_sejvJNWWNZjxRK9cjHzQaLPvUEruyY2PKQIbRA"
 PERSONEN_FILE = os.path.expanduser("~/firm-challenge-tracker/index.html")
 UPDATE_SCRIPT = os.path.expanduser("~/firm-challenge-tracker/update_page.py")
@@ -12,7 +13,7 @@ KNOWN_FILE = os.path.expanduser("~/firm-challenge-tracker/known_mails.json")
 
 def run_gapi(*args):
     """Führe google_api.py aus und gib JSON zurück."""
-    cmd = [sys.executable, GAPI] + list(args)
+    cmd = [VENV_PYTHON, f"{HERMES}/skills/productivity/google-workspace/scripts/google_api.py"] + list(args)
     result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
     if result.returncode != 0:
         print(f"GAPI Error: {result.stderr}")
@@ -47,22 +48,32 @@ def parse_from_snippet(snippet):
     
     return name, form
 
-# Challenge-Mapping (Formularname zu Challenge-Nummer)
+# Challenge-Mapping (Formularname zu Challenge-Nummer) - NEU mit 10 Challenges
 FORM_TO_CHALLENGE = {
     "J6_RM_Jesus Wunder": "3",
     "G5_RM_Gottesbilder Worte": "2",
     "H6_RM_Heiliger Geist Talente": "4",
-    "L6_RM_Stärken und Schwächen": "5",
+    "L6_RM_Stärken und Schwächen": "1",
+    "U7_RM_Glaube": "5",
+    "K2_RM_Kirche bedeutet für mich": "6",
+    "K5_RM_Ich und Kirche": "6",
+    "W4_RM_Nächstenliebe": "7",
+    "S5_RM_Natur": "8",
+    "V8_RM_Schattenseiten_Beichtzeit": "9",
+    "F9_RM_Firmung": "10",
 }
 
 CHALLENGE_TO_TAB = {
-    "1": "1: Mein Leben und Ich",
-    "2": "2. Gottesbilder - G5_RM_Gottesbilder Worte",
+    "1": "1: Mein Leben und ich - l6-rueckmeldung-leben-foto",
+    "2": "2. Gottesbilder - G5_RM_Gottesbilder Worte - g6-rueckmeldung-wortwolke",
     "3": "3: Jesus - J6_RM_Jesus Wunder",
     "4": "4: Heiliger Geist:  H6_RM_Heiliger Geist Talente",
-    "5": "L6_RM_Stärken und Schwächen",
-    "6": "Ch 7",
-    "7": "Ch 8",
+    "5": "5: u7-rueckmeldung-glaube",
+    "6": "6: k2-kirche-bedeutet-fuer-mich",
+    "7": "7: w4-rueckmeldung-ich-wir",
+    "8": "8: s5-rueckmeldung-natur",
+    "9": "9: v8-rueckmeldung-beichte",
+    "10": "10: f9-rueckmeldung-firmung",
 }
 
 def main():
@@ -108,8 +119,8 @@ def main():
         
         print(f"  ✅ {name} → Challenge {ch_num} ({form})")
         
-        # 3. Personen-Tabelle aktualisieren (Spalte I: Challenges)
-        personen = run_gapi("sheets", "get", SHEET_ID, "Personen!A1:J100")
+        # 3. Personen-Tabelle aktualisieren (Spalte C: Challenges)
+        personen = run_gapi("sheets", "get", SHEET_ID, "Personen!A1:C100")
         if personen:
             for row_idx, row in enumerate(personen[2:], start=3):
                 if len(row) >= 2:
@@ -118,7 +129,7 @@ def main():
                     name_lower = name.lower()
                     
                     if sname == name_lower or fname == name_lower or f"{fname} {sname}".find(name_lower) >= 0:
-                        current_ch = row[8].strip() if len(row) > 8 else ""
+                        current_ch = row[2].strip() if len(row) > 2 else ""
                         new_challenges = set(c.strip() for c in current_ch.replace(" ", "").split(",") if c.strip())
                         
                         if ch_num not in new_challenges:
@@ -126,12 +137,12 @@ def main():
                             sorted_ch = ", ".join(sorted(new_challenges, key=lambda x: int(x) if x.isdigit() else 99))
                             
                             # Update the cell
-                            cell_range = f"Personen!I{row_idx}"
+                            cell_range = f"Personen!C{row_idx}"
                             result = run_gapi("sheets", "update", SHEET_ID, cell_range, f'[[\"{sorted_ch}\"]]')
                             if result:
-                                print(f"  📝 Personen!I{row_idx} aktualisiert: {current_ch} → {sorted_ch}")
+                                print(f"  📝 Personen!C{row_idx} aktualisiert: {current_ch} → {sorted_ch}")
                             else:
-                                print(f"  ❌ Fehler beim Aktualisieren von Personen!I{row_idx}")
+                                print(f"  ❌ Fehler beim Aktualisieren von Personen!C{row_idx}")
                         else:
                             print(f"  ℹ️ Challenge {ch_num} bereits eingetragen")
                         break
