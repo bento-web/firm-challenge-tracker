@@ -471,11 +471,18 @@ def main():
     today_str = datetime.now().strftime("%d.%m.%Y")
     html = generate_html(challenge_data, name_map, today_str)
 
-    # 4. Write index.html
+    # 4. Write and encrypt index.html
     print(f"\nWriting {INDEX_PATH}...")
     with open(INDEX_PATH, "w", encoding="utf-8") as f:
         f.write(html)
-    print("Done.")
+    print(f"✅ index.html geschrieben")
+
+    # Encrypt with staticrypt
+    subprocess.run(
+        ["staticrypt", INDEX_PATH, "-p", "PG-GB-Firmung2026!", "-o", INDEX_PATH],
+        capture_output=True, text=True, timeout=30
+    )
+    print(f"✅ Passwortverschlüsselung angewendet")
 
     # 5. Git commit + push
     print("\nRunning git commit + push...")
