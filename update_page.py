@@ -207,7 +207,7 @@ def get_people_from_personen():
 
 
 def get_challenge_data():
-    """Read Personen tab Spalte C (Challenges) and return dict: {(nachname, vorname): [ch1_done, ch2_done, ...]}"""
+    """Read Personen tab Spalte E (Challenges) and return dict: {(nachname, vorname): [ch1_done, ch2_done, ...]}"""
     people = get_people_from_personen()
     
     # Result dict: key=(nachname, vorname) -> list of bool (TOTAL_CHALLENGES)
@@ -220,20 +220,20 @@ def get_challenge_data():
     for vorname, nachname, _ in people:
         name_map[(nachname.lower(), vorname.lower())] = vorname
     
-    # Read Personen tab with column C
-    rows = sheets_get("Personen", "A1:D998")
-    
+    # Read Personen tab with column E (Challenges)
+    rows = sheets_get("Personen", "A1:E998")
+
     for row in rows[2:]:
-        if len(row) < 3:
+        if len(row) < 5:
             continue
         nachname_raw = (row[0] or "").strip()
         vorname = (row[1] or "").strip()
         nachname = nachname_raw.lstrip("?")
-        ch_str = (row[2] or "").strip()
-        
+        ch_str = (row[4] or "").strip()
+
         if not nachname or not vorname:
             continue
-        
+
         # Parse challenge numbers
         nums = []
         for part in ch_str.replace(" ", "").split(","):
