@@ -108,7 +108,7 @@ def build_status_mail(vorname, nachname, firmling_email, eltern_email, done_list
         return None, None, None
 
     if done_count == 10:
-        status_summary = "Du hast bereits ALLE 10 Challenges abgeschlossen! %F0%9F%8E%89"
+        status_summary = "Du hast bereits ALLE 10 Challenges abgeschlossen! 🎉"
     else:
         status_summary = f"Du hast {done_count} von 10 Challenges abgeschlossen."
 
@@ -127,7 +127,7 @@ def build_status_mail(vorname, nachname, firmling_email, eltern_email, done_list
             f"👉 Klick auf den Link, gib die PIN **{PIN}** ein und leg los!"
         )
     else:
-        open_section = "\n\n%F0%9F%8E%89 **Alle Challenges sind erledigt!**"
+        open_section = "\n\n🎉 **Alle Challenges sind erledigt!**"
 
     body = f"""Hallo {vorname},
 
@@ -257,8 +257,8 @@ def main():
             done_list = sorted(ch_set, key=lambda x: int(x))
             done_count = len(ch_set)
 
-            firmling_email = row[11].strip() if len(row) > 11 else ""
-            eltern_email = row[12].strip() if len(row) > 12 else ""
+            firmling_email = row[12].strip() if len(row) > 12 else ""
+            eltern_email = row[13].strip() if len(row) > 13 else ""
 
             subject, body, recipients = build_status_mail(
                 vorname, nachname, firmling_email, eltern_email, done_list, done_count
