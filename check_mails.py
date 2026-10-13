@@ -264,9 +264,13 @@ def main():
     else:
         print("⚠️ update_page.py noch nicht vorhanden")
 
-    # 5. Status-Mails vorbereiten
-    print("\n--- Status-Mails versenden ---")
+    # 5. Status-Mails: NUR Entwürfe, außer explizit per FIRMUNG_AUTO_SEND=1 freigeschaltet
+    print("\n--- Status-Mails (Entwürfe) ---")
     personen_full = run_gapi("sheets", "get", SHEET_ID, "Personen!A1:R998")
+    auto_send = os.environ.get("FIRMUNG_AUTO_SEND") == "1"
+    if auto_send:
+        print("⚠️  FIRMUNG_AUTO_SEND=1 gesetzt — Status-Mails werden VERSENDET!")
+    drafts = []
     if not personen_full:
         print("❌ Konnte E-Mail-Daten nicht laden")
     else:
@@ -300,12 +304,20 @@ def main():
                     continue
 
                 to_str = ", ".join(recipients)
-                print(f"  📧 Sende an {to_str} ({vorname})...")
-                result = run_gapi("gmail", "send", "--to", to_str, "--subject", subject, "--body", body)
-                if result and result.get("status") == "sent":
-                    print(f"  ✅ Status-Mail an {vorname} gesendet")
+                if auto_send:
+                    print(f"  📧 Sende an {to_str} ({vorname})...")
+                    result = run_gapi("gmail", "send", "--to", to_str, "--subject", subject, "--body", body)
+                    if result and result.get("status") == "sent":
+                        print(f"  ✅ Status-Mail an {vorname} gesendet")
+                    else:
+                        print(f"  ❌ Fehler beim Senden")
                 else:
-                    print(f"  ❌ Fehler beim Senden")
+                    drafts.append((vorname, nachname, to_str, subject, body))
+                    print(f"  ✉️ Entwurf erstellt: {vorname} {nachname} -> {to_str} | {subject}")
+
+    if drafts and not auto_send:
+        print(f"\n⚠️  {len(drafts)} Status-Mail-ENTWÜRFE erstellt, NICHTS versendet (Freigabe durch User nötig).")
+        print("    Volltexte im Lauf-Protokoll; Versand nur mit FIRMUNG_AUTO_SEND=1.")
 
     print(f"\n=== Check abgeschlossen ({len(new_mails)} neue Mails) ===")
 
