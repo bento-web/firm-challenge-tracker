@@ -57,6 +57,27 @@ def run_gapi(*args):
     return json.loads(result.stdout) if result.stdout.strip() else []
 
 
+def header_index(rows, name):
+    """Spaltenindex zu einem Header-Namen (z. B. 'Challenges', 'E-Mail'), robust gegen Umstrukturierung."""
+    if not rows:
+        return None
+    target = name.strip().lower()
+    for i, h in enumerate(rows[0]):
+        if h and h.strip().lower() == target:
+            return i
+    return None
+
+
+def col_letter(idx):
+    """0-basierter Spaltenindex -> Buchstabe(n) (A, B, ..., Z, AA, ...)."""
+    letters = ""
+    idx += 1
+    while idx > 0:
+        idx, rem = divmod(idx - 1, 26)
+        letters = chr(65 + rem) + letters
+    return letters
+
+
 def load_known():
     if os.path.exists(KNOWN_FILE):
         with open(KNOWN_FILE) as f:
@@ -197,8 +218,13 @@ def main():
         print(f"  ✅ {name} -> Challenge {ch_num} ({form})")
         updated_persons.append((name, ch_num))
 
-        # 3. Personen-Tabelle aktualisieren (Spalte E: Challenges)
-        personen = run_gapi("sheets", "get", SHEET_ID, "Personen!A1:E100")
+        # 3. Personen-Tabelle aktualisieren (Spalte = Header 'Challenges')
+        personen = run_gapi("sheets", "get", SHEET_ID, "Personen!A1:R100")
+        ch_col = header_index(personen, "Challenges")
+        if ch_col is None:
+            print("  ❌ Spalte 'Challenges' im Header nicht gefunden")
+            known["known_ids"].append(mail_id)
+            continue
         if not personen:
             print("  ❌ Personen-Daten nicht lesbar")
             known["known_ids"].append(mail_id)
@@ -206,18 +232,18 @@ def main():
 
         row_idx, row = find_person_row(personen, name.lower())
         if row_idx is not None:
-            current_ch = row[4].strip() if len(row) > 4 else ""
-            new_set = set(c.strip() for c in current_ch.replace(" ", "").split(",") if c.strip())
+            current_ch = row[ch_col].strip() if len(row) > ch_col else ""
+            new_set = set(c.strip() for c in current_ch.replace(" ", "").split(",") if c.strip() and c.strip().isdigit())
 
             if ch_num not in new_set:
                 new_set.add(ch_num)
                 sorted_ch = ", ".join(sorted(new_set, key=lambda x: int(x) if x.isdigit() else 99))
-                cell_range = f"Personen!E{row_idx}"
+                cell_range = f"Personen!{col_letter(ch_col)}{row_idx}"
                 result = run_gapi("sheets", "update", SHEET_ID, cell_range, "--values", f'[["{sorted_ch}"]]')
                 if result:
-                    print(f"  📝 Personen!E{row_idx} aktualisiert: {current_ch} -> {sorted_ch}")
+                    print(f"  📝 Personen!{cell_range} aktualisiert: {current_ch} -> {sorted_ch}")
                 else:
-                    print(f"  ❌ Fehler beim Aktualisieren von Personen!E{row_idx}")
+                    print(f"  ❌ Fehler beim Aktualisieren von Personen!{cell_range}")
             else:
                 print(f"  ℹ️ Challenge {ch_num} bereits eingetragen")
         else:
@@ -238,42 +264,48 @@ def main():
     else:
         print("⚠️ update_page.py noch nicht vorhanden")
 
-    # 5. Status-Mails versenden
+    # 5. Status-Mails vorbereiten
     print("\n--- Status-Mails versenden ---")
-    personen_full = run_gapi("sheets", "get", SHEET_ID, "Personen!A1:N998")
+    personen_full = run_gapi("sheets", "get", SHEET_ID, "Personen!A1:R998")
     if not personen_full:
         print("❌ Konnte E-Mail-Daten nicht laden")
     else:
-        for name_from_mail, ch_num in updated_persons:
-            row_idx, row = find_person_row(personen_full, name_from_mail.lower())
-            if row is None:
-                print(f"  ⚠️ {name_from_mail}: Nicht in Tabelle")
-                continue
+        ch_col = header_index(personen_full, "Challenges")
+        mail_col = header_index(personen_full, "E-Mail")
+        ezber_col = header_index(personen_full, "E-Mail EzBer")
+        if ch_col is None or mail_col is None or ezber_col is None:
+            print(f"❌ Header-Spalten nicht gefunden (ch={ch_col}, mail={mail_col}, ezber={ezber_col})")
+        else:
+            for name_from_mail, ch_num in updated_persons:
+                row_idx, row = find_person_row(personen_full, name_from_mail.lower())
+                if row is None:
+                    print(f"  ⚠️ {name_from_mail}: Nicht in Tabelle")
+                    continue
 
-            vorname = row[1].strip().lstrip("?")
-            nachname = row[0].strip().lstrip("?")
-            current_ch = row[4].strip() if len(row) > 4 else ""
-            ch_set = set(c.strip() for c in current_ch.replace(" ", "").split(",") if c.strip())
-            done_list = sorted(ch_set, key=lambda x: int(x))
-            done_count = len(ch_set)
+                vorname = row[1].strip().lstrip("?")
+                nachname = row[0].strip().lstrip("?")
+                current_ch = row[ch_col].strip() if len(row) > ch_col else ""
+                ch_set = set(c.strip() for c in current_ch.replace(" ", "").split(",") if c.strip() and c.strip().isdigit())
+                done_list = sorted(ch_set, key=lambda x: int(x))
+                done_count = len(ch_set)
 
-            firmling_email = row[12].strip() if len(row) > 12 else ""
-            eltern_email = row[13].strip() if len(row) > 13 else ""
+                firmling_email = row[mail_col].strip() if len(row) > mail_col and "@" in (row[mail_col] or "") else ""
+                eltern_email = row[ezber_col].strip() if len(row) > ezber_col and "@" in (row[ezber_col] or "") else ""
 
-            subject, body, recipients = build_status_mail(
-                vorname, nachname, firmling_email, eltern_email, done_list, done_count
-            )
-            if not recipients:
-                print(f"  ⚠️ {vorname} {nachname}: Keine E-Mail-Adresse")
-                continue
+                subject, body, recipients = build_status_mail(
+                    vorname, nachname, firmling_email, eltern_email, done_list, done_count
+                )
+                if not recipients:
+                    print(f"  ⚠️ {vorname} {nachname}: Keine E-Mail-Adresse")
+                    continue
 
-            to_str = ", ".join(recipients)
-            print(f"  📧 Sende an {to_str} ({vorname})...")
-            result = run_gapi("gmail", "send", "--to", to_str, "--subject", subject, "--body", body)
-            if result and result.get("status") == "sent":
-                print(f"  ✅ Status-Mail an {vorname} gesendet")
-            else:
-                print(f"  ❌ Fehler beim Senden")
+                to_str = ", ".join(recipients)
+                print(f"  📧 Sende an {to_str} ({vorname})...")
+                result = run_gapi("gmail", "send", "--to", to_str, "--subject", subject, "--body", body)
+                if result and result.get("status") == "sent":
+                    print(f"  ✅ Status-Mail an {vorname} gesendet")
+                else:
+                    print(f"  ❌ Fehler beim Senden")
 
     print(f"\n=== Check abgeschlossen ({len(new_mails)} neue Mails) ===")
 

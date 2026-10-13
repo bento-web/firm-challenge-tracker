@@ -220,16 +220,25 @@ def get_challenge_data():
     for vorname, nachname, _ in people:
         name_map[(nachname.lower(), vorname.lower())] = vorname
     
-    # Read Personen tab with column E (Challenges)
-    rows = sheets_get("Personen", "A1:E998")
+    # Read Personen tab: Spalte per Header 'Challenges' (robust gegen Umstrukturierung)
+    rows = sheets_get("Personen", "A1:R998")
+    ch_col = None
+    if rows:
+        for i, h in enumerate(rows[0]):
+            if h and h.strip().lower() == "challenges":
+                ch_col = i
+                break
+    if ch_col is None:
+        print("ERROR: Spalte 'Challenges' im Header nicht gefunden", file=sys.stderr)
+        sys.exit(1)
 
     for row in rows[2:]:
-        if len(row) < 5:
+        if len(row) <= ch_col:
             continue
         nachname_raw = (row[0] or "").strip()
         vorname = (row[1] or "").strip()
         nachname = nachname_raw.lstrip("?")
-        ch_str = (row[4] or "").strip()
+        ch_str = (row[ch_col] or "").strip()
 
         if not nachname or not vorname:
             continue
